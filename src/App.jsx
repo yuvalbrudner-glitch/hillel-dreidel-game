@@ -70,7 +70,10 @@ function applySpin(prev, i, k) {
   }
   t.done = true
   s.log.unshift(m)
-  if (s.tables.every((x) => x.done) && s.over < 0) startRound(s)
+  if (s.over < 0 && (s.pool === 0 || s.tables.every((x) => x.done))) {
+  if (s.pool === 0) s.log.unshift('The pool is empty')
+  startRound(s)
+}
   return s
 }
 
