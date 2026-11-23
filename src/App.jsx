@@ -11,6 +11,7 @@ const RES = {
 
 // Mutates the (already cloned) state: starts the next round.
 function startRound(s) {
+  s.pending = false
   s.round++
   s.tables.forEach((t) => {
     if (t.g <= 0) {
@@ -36,6 +37,7 @@ function fresh(n) {
     round: 0,
     pool: 0,
     over: -1,
+    pending: false,
     tables: Array.from({ length: n }, () => ({ g: START, done: false, out: false })),
     log: [],
   }
@@ -70,10 +72,14 @@ function applySpin(prev, i, k) {
   }
   t.done = true
   s.log.unshift(m)
-  if (s.over < 0 && (s.pool === 0 || s.tables.every((x) => x.done))) {
-  if (s.pool === 0) s.log.unshift('The pool is empty')
-  startRound(s)
-}
+  if (s.over < 0) {
+    if (s.pool === 0) {
+      s.pending = true
+      s.log.unshift('The pool is empty')
+    } else if (s.tables.every((x) => x.done)) {
+      startRound(s)
+    }
+  }
   return s
 }
 
@@ -95,6 +101,12 @@ export default function App() {
     if (!hist.length) return
     setS(hist[hist.length - 1])
     setHist(hist.slice(0, -1))
+  }
+  const nextRound = () => {
+    setHist((h) => [...h, S])
+    const s = structuredClone(S)
+    startRound(s)
+    setS(s)
   }
   const restart = (teams = n) => {
     setHist([])
@@ -126,6 +138,8 @@ export default function App() {
           <span>
             {S.over >= 0
               ? `Team ${S.over + 1} wins`
+              : S.pending
+              ? 'The pool is empty'
               : `${waiting} team${waiting === 1 ? '' : 's'} left to spin`}
           </span>
         </div>
@@ -135,6 +149,13 @@ export default function App() {
         <div className="barw">
           <div className="barf" style={{ width: Math.min(100, (S.pool / total) * 100) + '%' }} />
         </div>
+        {S.pending && S.over < 0 && (
+          <div className="bar">
+            <button className="primary" onClick={nextRound}>
+              Start round {S.round + 1}
+            </button>
+          </div>
+        )}
         <div className="bar">
           <button onClick={undo} disabled={!hist.length}>Undo last spin</button>
           <label className="sel">
@@ -159,7 +180,11 @@ export default function App() {
             <div className="st">{t.out ? 'Out of gelt' : t.done ? 'Has spun' : 'Waiting to spin'}</div>
             <div className="btns">
               {Object.entries(RES).map(([k, r]) => (
-                <button key={k} disabled={t.done || S.over >= 0} onClick={() => spin(i, k)}>
+                <button
+                  key={k}
+                  disabled={t.done || S.over >= 0 || S.pending}
+                  onClick={() => spin(i, k)}
+                >
                   <span className="r">
                     <b>{r.l}</b>
                     <span>{r.n}<br />{r.d}</span>
