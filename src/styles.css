@@ -1,0 +1,30 @@
+:root{--bg:#f3f1ec;--surface:#fff;--ink:#17233b;--mute:#5d6678;--line:#d9d6cc;--gold:#c58a0c;--goldfill:#e8b630;--blue:#1d3a8a;--btn:#eef0f6}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0f1830;--surface:#18254a;--ink:#f1efe8;--mute:#a4adc4;--line:#2d3c6b;--gold:#f0c24a;--goldfill:#f0c24a;--blue:#8fb0ff;--btn:#22325f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 Georgia,"Times New Roman",serif;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+main{max-width:960px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:1.4rem;margin:0 0 16px;font-weight:700}
+.pool{background:var(--surface);border:2px solid var(--gold);border-radius:14px;padding:18px;margin-bottom:20px}
+.meta{display:flex;justify-content:space-between;color:var(--mute);margin-bottom:8px}
+.big{font-size:3.4rem;line-height:1;font-weight:700;color:var(--gold)}
+.big small{font-size:1.2rem;color:var(--mute);font-weight:400}
+.barw{height:14px;border:2px solid var(--gold);border-radius:8px;margin-top:12px;overflow:hidden}
+.barf{height:100%;background:var(--goldfill);transition:width .3s}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.sel{display:flex;align-items:center;gap:6px;color:var(--mute)}
+select{font:inherit;min-height:44px;border-radius:8px;border:1px solid var(--line);background:var(--btn);color:var(--ink);padding:0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.t{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px}
+.t.done{opacity:.6}
+.t h2{margin:0;font-size:1.05rem;display:flex;justify-content:space-between;align-items:baseline}
+.t .n{font-size:1.6rem;font-weight:700;color:var(--gold)}
+.st{font-size:.85rem;color:var(--mute)}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--btn);color:var(--ink);border-radius:8px;padding:8px 10px;min-height:44px}
+button:focus-visible,select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+button:disabled{opacity:.4;cursor:default}
+.r{display:flex;align-items:center;gap:8px;justify-content:center}
+.r b{font-size:1.6rem;line-height:1}
+.r span{font-size:.85rem;color:var(--mute)}
+.log{margin-top:22px;color:var(--mute);font-size:.9rem}
+.log div{padding:3px 0;border-bottom:1px solid var(--line)}
